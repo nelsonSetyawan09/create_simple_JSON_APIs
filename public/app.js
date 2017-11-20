@@ -16,7 +16,7 @@ $(document).ready(function(){
     });
 
     $('.list').on('click','.task', function(evt){
-        console.log('halo update list')
+        updateTodo($(this))
     });
 }); //end document ready
 
@@ -26,14 +26,14 @@ createTodo = (valInput)=>{
     let userInput = valInput.trim()
     if (userInput) {
         $.post('/api/todos', { name: userInput })
-            // todo merupakan return dari database 
-            // stelah dibuat data dari userInput
-            .then(todo => {
-                console.log(todo);
-                $('#todoInput').val('');
-                addTodo(todo)
-            })
-            .catch(err => console.log(err))
+        // todo merupakan return dari database 
+        // stelah dibuat data dari userInput
+        .then(todo => {
+            console.log(todo);
+            $('#todoInput').val('');
+            addTodo(todo)
+        })
+        .catch(err => console.log(err))
     }
     
 }
@@ -41,7 +41,8 @@ createTodo = (valInput)=>{
 addTodo = (todo) => {
     let newTodo = $(`<li class='task'>${todo.name}<span>X</span></li>`);
     // jQuery menyimpan data(id) secara tersembunyi
-    newTodo.data('id', todo._id)
+    newTodo.data('id', todo._id);
+    newTodo.data('completed', todo.completed);
     if (todo.completed) {
         newTodo.addClass('done')
     }
@@ -61,3 +62,32 @@ removeTodo =(todo)=>{
     })
     .catch(err => console.log(err))
 }
+
+updateTodo = (todo)=>{
+    let _id = todo.data('id');
+    let isCompleted = !todo.data('completed');
+    $.ajax({
+        method: 'PUT',
+        url: `/api/todos/${_id}`,
+        data: { completed: isCompleted }
+    })
+    .then(todoUpdate=>{
+        console.log(todoUpdate);
+        todo.toggleClass('done');
+        todo.data('completed', isCompleted)
+    })
+    .catch(err=>console.log(err))
+}
+
+
+
+// jQuery AJAX syntax
+        // $.ajax({
+        //     method:'POST',
+        //     url: '/api/todos',
+        //     data: { name: userInput }
+        // })
+
+        // sama dengan
+
+        // $.post('/api/todos', { name: userInput })
