@@ -24,7 +24,7 @@ header h2{
 }
 
 /* FORM */
-form{
+.form{
     width: 800px;
     margin: 50px auto 20px;
 }
@@ -55,7 +55,7 @@ form{
     transition: all .3s ease;
 }
 .task:hover{
-    background: rgba(0,0,0, .2);
+    background: rgba(0,0,0, .05);
     cursor: pointer;
 }
 .task:hover span{
@@ -71,6 +71,6 @@ li span{
     transition: all 0.3s;
     opacity: 0;
 }
-li span: hover{
+li span:hover{
     color: #e74c3c;
 }
